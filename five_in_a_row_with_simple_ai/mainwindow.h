@@ -5,6 +5,8 @@
 #include <QPainter>
 #include <QMessageBox>
 #include <QMouseEvent>
+#include <QKeyEvent>
+#include <stack>
 
 class MainWindow : public QMainWindow
 {
@@ -33,6 +35,7 @@ public:
     QPoint point2pos(QPoint point) const;
     QPoint point2pos(int x, int y) const;
     void mousePressEvent(QMouseEvent *event);
+    void keyPressEvent(QKeyEvent *event);
     void addPoint(QPoint pos);
     int getPlayerColor(int player) const;
     void changePlayer();
@@ -44,8 +47,10 @@ public:
     int getPlayerByColor(int color) const;
     void init();
     void changeState();
+    void AI_Behavior();
 private:
     int map[MAX_SIZE][MAX_SIZE];
+    std::stack<std::pair<QPoint,int>>recStep;
 
 };
 

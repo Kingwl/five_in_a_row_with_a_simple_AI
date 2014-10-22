@@ -80,10 +80,10 @@ void MainWindow::addPoint(QPoint pos)
     if(is_in(pos) && map[pos.x()][pos.y()] == COLOR_NONE)
     {
         map[pos.x()][pos.y()] = getPlayerColor(playerNow);
+        recStep.push(std::pair<QPoint,int>(QPoint(pos.x(),pos.y()),playerNow));
         changePlayer();
         changeState();
     }
-
 }
 int MainWindow::getPlayerColor(int player) const
 {
@@ -223,6 +223,10 @@ void MainWindow::init()
     player_h_color = COLOR_BLACK;
     player_c_color = COLOR_WHITE;
     stateNow = STATE_PLAY;
+    while(!recStep.empty())
+    {
+        recStep.pop();
+    }
 }
 void MainWindow::changeState()
 {
@@ -231,4 +235,24 @@ void MainWindow::changeState()
     }else if(stateNow == STATE_WAIT){
         stateNow = STATE_PLAY;
     }
+}
+void MainWindow::AI_Behavior()
+{
+
+}
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if(event -> modifiers() == Qt::ControlModifier && event -> key() == Qt::Key_Z)
+    {
+        if(!recStep.empty())
+        {
+            std::pair<QPoint,int> p = recStep.top();
+            QPoint pt = p.first;
+            recStep.pop();
+            map[pt.x()][pt.y()] = COLOR_NONE;
+            changePlayer();
+            changeState();
+        }
+    }
+    update();
 }
